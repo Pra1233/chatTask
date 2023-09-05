@@ -11,7 +11,11 @@ const sequelize = require("./util/database");
 const userRoutes = require("./routes/UserRoutes");
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://192.168.0.107:5500",
+  })
+);
 app.use(bodyParser.json({ extended: false }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
