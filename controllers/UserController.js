@@ -6,8 +6,12 @@ const User = require("../models/Signup");
 const sequelize = require("../util/database");
 const app = express();
 
-app.use(bodyParser.json({ extended: false }));
-app.use(bodyParser.urlencoded({ extended: false }));
+function generateToken(id, name, email, phone) {
+  return jwt.sign(
+    { userId: id, name: name, email: email, phone: phone },
+    "secretkey"
+  );
+}
 
 function isstringValid(string) {
   if (string == undefined || string.length === 0) return true;
@@ -37,7 +41,9 @@ const postSignup = async (req, res, next) => {
         res.status(201).json({ message: "User SignUp Successfully" });
       });
     } else {
-      res.status(403).json({ message: "User already exist" });
+      return res
+        .status(403)
+        .json({ success: "false", message: "User already exist" });
     }
   } catch (err) {
     console.log(err);
@@ -46,56 +52,50 @@ const postSignup = async (req, res, next) => {
   }
 };
 
-const generateAccessToken = (id, name, phone, ispremiumuser) => {
-  return jwt.sign(
-    { userId: id, name: name, phone: phone, ispremiumuser },
-    "secretkey"
-  );
+const postLogin = async (req, res, next) => {
+  const t = await sequelize.transaction();
+  try {
+    const { email, password } = req.body;
+    if (isstringValid(email) || isstringValid(password)) {
+      document.body.innerHTML += `<h3 style="color:red;">${e}</h3>`;
+      return res.status(400).json({ e: "Bad Parameter, Something is missing" });
+    }
+    const user = await User.findAll({ where: { email }, transaction: t }); //where will give  user of that email
+    console.log(user);
+    if (user.length > 0) {
+      bcrypt.compare(password, user[0].password, async (err, resp) => {
+        if (err) {
+          throw new Error("Something is wrong");
+        }
+        if (resp == true) {
+          await t.commit();
+          res.status(200).json({
+            success: true,
+            token: generateToken(
+              user[0].id,
+              user[0].name,
+              user[0].email,
+              user[0].phone
+            ),
+            message: "User Logged Successfully",
+          });
+        } else {
+          return res
+            .status(401)
+            .json({ success: false, message: "Password is Incorrect" });
+        }
+      });
+    } else {
+      res.status(404).json({ success: false, message: "User Doesnt Exist" });
+    }
+  } catch (e) {
+    await t.rollback();
+    res.status(500).json({ success: false, message: e });
+    console.log("ERROR In PostLogin", e);
+  }
 };
 
-// const postLogin = async (req, res, next) => {
-//   try {
-//     const { email, password } = req.body;
-//     if (isstringValid(email) || isstringValid(password)) {
-//       document.body.innerHTML += `<h3 style="color:red;">${e}</h3>`;
-//       return res.status(400).json({ e: "Bad Parameter, Something is missing" });
-//     }
-//     const user = await User.findAll({ where: { email } }); //where will give  user of that email
-//     if (user.length > 0) {
-//       bcrypt.compare(password, user[0].password, (err, resp) => {
-//         if (err) {
-//           throw new Error("Something is wrong");
-//         }
-
-//         if (resp == true) {
-//           return res
-//             .status(200)
-//             .json({
-//               success: true,
-//               message: "User Logged Successfully",
-//               token: generateAccessToken(
-//                 user[0].id,
-//                 user[0].name,
-//                 user[0].ispremiumuser
-//               ),
-//             });
-//         } else {
-//           return res
-//             .status(400)
-//             .json({ success: false, message: "Password is Incorrect" });
-//         }
-//       });
-//     } else {
-//       res.status(404).json({ success: false, message: "User Doesnt Exist" });
-//     }
-//   } catch (e) {
-//     res.status(500).json({ success: false, message: e });
-//     console.log("ERROR In PostLogin", e);
-//   }
-// };
-
 module.exports = {
-  generateAccessToken,
-  //   postLogin,
+  postLogin,
   postSignup,
 };

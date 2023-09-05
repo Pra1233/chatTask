@@ -14,6 +14,8 @@ const app = express();
 app.use(
   cors({
     origin: "http://192.168.0.107:5500",
+    methods: ["GET", "POST", "DELETE"],
+    // credentials:true //for cookies should not block
   })
 );
 app.use(bodyParser.json({ extended: false }));
