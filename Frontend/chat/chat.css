@@ -1,0 +1,49 @@
+.h1 {
+    text-align: center;
+    background-color: yellow;
+}
+
+body {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    background-color: rgb(145, 5, 5);
+}
+
+
+
+.foot {
+    display: flex;
+}
+
+.msg {
+    height: 2rem;
+    border: 2px solid black;
+    border-radius: 0.5rem;
+    margin-right: 1.9%;
+}
+
+.send-btn {
+    color: white;
+    border-radius: 0.5rem;
+    font-weight: bold;
+    width: 4rem;
+    background-color: rgb(39, 38, 38);
+}
+
+
+
+ul {
+    list-style: none;
+}
+
+li {
+    border: 1px solid rgb(197, 205, 50);
+    background-color: rgb(202, 194, 194);
+    margin-top: 0.2rem;
+    width: 50rem;
+    color: black;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-weight: bold;
+    height: 6vh;
+}

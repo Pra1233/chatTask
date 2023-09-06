@@ -17,7 +17,8 @@ const onPostLogin = async (obj) => {
     document.body.innerHTML += `<h3 style="color:green;">${response.data.message}</h3>`;
     alert(response.data.message);
     localStorage.setItem("token", response.data.token);
-    // window.location.href = "../expense/index.html";
+    window.location.href = "../chat/chat.html";
+
   } catch (e) {
     if (e.message === "Request failed with status code 404") {
       alert("User Not Exist");
