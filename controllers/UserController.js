@@ -2,7 +2,7 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
-const User = require("../models/Signup");
+const User = require("../models/User");
 const sequelize = require("../util/database");
 const app = express();
 

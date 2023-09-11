@@ -1,5 +1,5 @@
 const jwt=require('jsonwebtoken');
-const User=require('../models/Signup');
+const User=require('../models/User');
 
 const auth=(req,res,next)=>{
     try{

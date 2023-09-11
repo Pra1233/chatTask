@@ -8,12 +8,15 @@ dotenv.config();
 const sequelize = require("./util/database");
 
 //Model
-const User=require("./models/Signup");
+const User=require("./models/User");
 const Message=require("./models/Message");
+const Group=require("./models/Group");
+const GroupUser=require("./models/GroupUser")
 
 // Route
 const userRoutes = require("./routes/UserRoutes");
 const messageRoutes=require("./routes/MesaageRoutes");
+const groupRoutes=require("./routes/GroupRoutes");
 
 const app = express();
 // app.use(cors());
@@ -30,11 +33,17 @@ app.use(express.json());
 
 app.use(userRoutes);
 app.use(messageRoutes);
+app.use(groupRoutes);
 
 
 User.hasMany(Message);
 Message.belongsTo(User);
 
+Group.hasMany(Message);
+Message.belongsTo(Group);
+
+User.belongsToMany(Group, { through: GroupUser});
+Group.belongsToMany(User,{through:GroupUser});
 
 // {force:true}
 sequelize
