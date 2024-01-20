@@ -9,7 +9,9 @@ router.get('/message/getmsg',middleware.auth,messageController.getMessage);
 
 router.get('/message/getadminmsg/:gid',middleware.auth,messageController.getAdminOldMessage);
 
-router.get('/message/newmessage',middleware.auth,messageController.getNewMessage);
+router.get('/users/adminusers/:gid',middleware.auth,messageController.getAdminUsers);
+
+
 
 
 module.exports = router;

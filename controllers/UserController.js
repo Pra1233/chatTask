@@ -1,10 +1,8 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const bodyParser = require("body-parser");
 const User = require("../models/User");
 const sequelize = require("../util/database");
-const app = express();
 
 function generateToken(id, name, email, phone) {
   return jwt.sign(
@@ -21,34 +19,40 @@ const postSignup = async (req, res, next) => {
   const t = await sequelize.transaction();
   const { name, email, phone, password } = req.body;
   try {
-    const user = await User.findOne({
-      where: { email: email },
-      transaction: t,
-    });
-    console.log("34223232", user);
-    if (user === null) {
-      let salt = 10;
-      bcrypt.hash(password, salt, async (err, hash) => {
-        if (err) {
-          console.log("Unable to create new user");
-          res.json({ message: "Unable to create new user" });
-        }
-        await User.create(
-          { name, email, phone, password: hash },
-          { transaction: t }
-        );
-        await t.commit();
-        res.status(201).json({ message: "User SignUp Successfully" });
-      });
-    } else {
+    if (
+      isstringValid(name) ||
+      isstringValid(email) ||
+      isstringValid(phone) ||
+      isstringValid(password)
+    ) {
+      document.body.innerHTML += `<h3 style="color:red;">${e}</h3>`;
+      return res.status(400).json({ e: "Bad Parameter, Something is missing" });
+    }
+
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
       return res
         .status(403)
-        .json({ success: "false", message: "User already exist" });
+        .json({ success: false, message: "User already exists" });
     }
+
+    let salt = 10;
+    bcrypt.hash(password, salt, async (err, hash) => {
+      if (err) {
+        console.log("Unable to create new user");
+        res.json({ message: "Unable to create new user" });
+      }
+      await User.create(
+        { name, email, phone, password: hash },
+        { transaction: t }
+      );
+      await t.commit();
+      res.status(201).json({ message: "User SignUp Successfully" });
+    });
   } catch (err) {
     console.log(err);
     await t.rollback();
-    res.status(500).json(err);
+    res.status(500).json({ err: "Internal Server Error" });
   }
 };
 
@@ -71,12 +75,7 @@ const postLogin = async (req, res, next) => {
           await t.commit();
           res.status(200).json({
             success: true,
-            token: generateToken(
-              user[0].id,
-              user[0].name,
-              user[0].email,
-              user[0].phone
-            ),
+            token: generateToken(user[0].id, user[0].name, user[0].email), //function calling
             message: "User Logged Successfully",
           });
         } else {

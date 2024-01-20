@@ -1,0 +1,75 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+  background-image: url("https://wallpapercave.com/wp/wp2919299.jpg");
+  background-size: cover;
+}
+
+.forms {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+
+.forms h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.input-block {
+  margin-bottom: 15px;
+}
+
+.input-block label {
+  display: block;
+  margin-bottom: 5px;
+  color: #666;
+}
+
+.input-block input {
+  width: 90%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.btn-signup {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-signup:hover {
+  background-color: #0056b3;
+}
+
+.btn-login {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.btnlogin {
+  padding: 10px 20px;
+  border: 1px solid #007bff;
+  background-color: transparent;
+  color: #007bff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btnlogin:hover {
+  background-color: #007bff;
+  color: #fff;
+}

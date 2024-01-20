@@ -11,6 +11,9 @@ const Message=sequelize.define("Message",{
    message:{
     type:Sequelize.TEXT,
    },
+   name:{
+      type:Sequelize.STRING,
+   }
 })
 module.exports= Message;
    
